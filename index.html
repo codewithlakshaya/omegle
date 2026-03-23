@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Chat App</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="container">
+    <h1>Anonymous Chat</h1>
+    <p id="status">Connecting...</p>
+
+    <div id="chat" class="chat-box"></div>
+
+    <div class="input-area">
+      <input id="msg" placeholder="Type a message..." />
+      <button onclick="sendMsg()">Send</button>
+      <button class="next" onclick="nextUser()">Next</button>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+
+    socket.on("connected", () => {
+      document.getElementById("status").innerText = "Connected to stranger";
+    });
+
+    socket.on("message", (msg) => {
+      addMessage("Stranger", msg);
+    });
+
+    socket.on("disconnected", () => {
+      document.getElementById("status").innerText = "Stranger disconnected. Waiting...";
+    });
+
+    function sendMsg() {
+      const input = document.getElementById("msg");
+      addMessage("You", input.value);
+      socket.emit("message", input.value);
+      input.value = "";
+    }
+
+    function nextUser() {
+      socket.emit("next");
+      document.getElementById("chat").innerHTML = "";
+      document.getElementById("status").innerText = "Finding new stranger...";
+    }
+
+    function addMessage(sender, text) {
+      const div = document.createElement("div");
+      div.className = sender === "You" ? "msg you" : "msg stranger";
+      div.innerText = sender + ": " + text;
+      document.getElementById("chat").appendChild(div);
+      div.scrollIntoView();
+    }
+  </script>
+
+</body>
+</html>
