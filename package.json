@@ -1,0 +1,17 @@
+{
+  "name": "omegle-clone",
+  "version": "1.0.0",
+  "description": "Omegle clone chat app",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1",
+    "socket.io": "^4.8.3"
+  }
+}
